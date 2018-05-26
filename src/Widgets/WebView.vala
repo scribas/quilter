@@ -52,21 +52,44 @@ namespace Quilter {
 
         private string set_stylesheet () {
             var settings = AppSettings.get_default ();
-            if (!settings.dark_mode) {
-                string normal = Styles.quilter.css;
-                return normal;
-            } else {
+            if (settings.dark_mode) {
                 string dark = Styles.quilterdark.css;
                 return dark;
+            } else if (settings.sepia_mode) {
+                string sepia = Styles.quiltersepia.css;
+                return sepia;
             }
+
+            string normal = Styles.quilter.css;
+            return normal;
         }
 
         private string set_highlight_stylesheet () {
             var settings = AppSettings.get_default ();
             if (settings.dark_mode) {
                 return Build.PKGDATADIR + "/highlight.js/styles/dark.min.css";
+            } else if (settings.sepia_mode) {
+                return Build.PKGDATADIR + "/highlight.js/styles/sepia.min.css";
+            }
+
+            return Build.PKGDATADIR + "/highlight.js/styles/default.min.css";
+        }
+
+        private string set_latex () {
+            var settings = AppSettings.get_default ();
+            if (settings.latex) {
+                return Build.PKGDATADIR + "/katex/katex.js";
             } else {
-                return Build.PKGDATADIR + "/highlight.js/styles/default.min.css";
+                return "";
+            }
+        }
+
+        private string set_highlight () {
+            var settings = AppSettings.get_default ();
+            if (settings.highlight) {
+                return Build.PKGDATADIR + "/highlight.js/lib/highlight.min.js";
+            } else {
+                return "";
             }
         }
 
@@ -184,6 +207,8 @@ namespace Quilter {
 
         public void update_html_view () {
             string highlight_stylesheet = set_highlight_stylesheet();
+            string highlight = set_highlight();
+            string latex = set_latex();
             string stylesheet = set_stylesheet ();
             string build = Build.PKGDATADIR;
             string markdown = process ();
@@ -193,12 +218,11 @@ namespace Quilter {
                 <head>
                     <meta charset="utf-8">
                     <link rel="stylesheet" href=" %s "/>
-                    <script src="%s/highlight.js/lib/highlight.min.js"></script>
+                    <script src="%s"></script>
                     <script>hljs.initHighlightingOnLoad();</script>
                     <link rel="stylesheet" href="%s/katex/katex.css">
-                    <script src="%s/katex/katex.js"></script>
-                    <script src="%s/katex/katex-autorender.js"></script>
-                    <script>document.addEventListener("DOMContentLoaded", function() {renderMathInElement(document.getElementsByClassName("markdown-body")[0], {delimiters: [{left: "$$", right: "$$", display: true},{left: "\\[", right: "\\]", display: true},{left: "$", right: "$", display: false},{left: "\\(", right: "\\)", display: false}]});});</script>
+                    <script src="%s"></script>
+                    <script>document.addEventListener("DOMContentLoaded", function() {renderMathInElement(document.getElementsByClassName("markdown-body")[0], {delimiters: [{left: "\\[", right: "\\]", display: true},{left: "\\(", right: "\\)", display: false}]});});</script>
                     <style>%s</style>
                 </head>
                 <body>
@@ -206,7 +230,7 @@ namespace Quilter {
                         %s
                     </div>
                 </body>
-            </html>""".printf(highlight_stylesheet, build, build, build, build, stylesheet, markdown);
+            </html>""".printf(highlight_stylesheet, highlight, build, latex, stylesheet, markdown);
             this.load_html (html, "file:///");
         }
     }

@@ -18,12 +18,15 @@
 namespace Quilter {
     public class AppSettings : Granite.Services.Settings {
         public bool dark_mode { get; set; }
+        public bool sepia_mode { get; set; }
         public bool focus_mode { get; set; }
         public bool fullscreen { get; set; }
         public bool show_num_lines { get; set; }
         public bool autosave { get; set; }
         public bool spellcheck { get; set; }
         public bool statusbar { get; set; }
+        public bool latex { get; set; }
+        public bool highlight { get; set; }
         public bool use_system_font { get; set; }
         public int focus_mode_type { get; set; }
         public int margins { get; set; }
