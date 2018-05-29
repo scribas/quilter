@@ -30,7 +30,7 @@ public class Quilter.Styles.quiltersepia {
 
     p {
       font-size: 1rem;
-      color: #2D1708;
+      color: #3b3228;
     }
 
     h1,
@@ -93,9 +93,9 @@ public class Quilter.Styles.quiltersepia {
     }
 
     body {
-      color: #2D1708;
+      color: #3b3228;
       background-color: #F0E8DD;
-      font-family: 'Open Sans', Helvetica, sans-serif;
+      font-family: 'Tinos', serif;
       font-weight: 400;
       line-height: 1.4rem;
       margin-left: 80px;
@@ -114,17 +114,17 @@ public class Quilter.Styles.quiltersepia {
 
     table th {
       font-weight: bold;
-      background-color: #8C7A6D;
+      background-color: #E8DCCB;
     }
 
     table th,
     table td {
       padding: 8px 13px;
-      border: 1px solid #8C7A6D;
+      border: 1px solid #E8DCCB;
     }
 
     table tr {
-      border-top: 1px solid #8C7A6D;
+      border-top: 1px solid #E8DCCB;
     }
 
     img {
@@ -141,23 +141,32 @@ public class Quilter.Styles.quiltersepia {
       color: #1d99f3;
     }
 
-    code {
+    code{
+      display: inline-block;
+      padding: 0 0.25rem;
+      background-color: #E8DCCB;
+      border: 1px solid #E8DCCB;
+      border-radius: 4px;
       font-family: 'Quilt Mono', monospace;
-      text-align: left;
-      padding: 1rem !important;
-      border-radius: 5px;
+      font-weight: normal;
+    }
+
+    pre code{
+      display: block;
+      margin: 1rem auto;
+      overflow-x: scroll;
     }
 
     blockquote {
       margin: 0;
-      border-left: 5px solid #8C7A6D;
+      border-left: 5px solid #7e6e62;
       font-style: italic;
       padding-left: .8rem;
       text-align: left;
     }
     
     blockquote > p {
-      color: #8C7A6D;
+      color: inherit;
       margin-top: 20px;
       margin-bottom: 20px;
       padding-top: 20px;
@@ -170,6 +179,24 @@ public class Quilter.Styles.quiltersepia {
   
     ul, ol {
       margin-left: -40px;
+    }
+
+    hr {
+      overflow: visible;
+      padding: 0;
+      border: none;
+      color: inherit;
+      text-align: center;
+    }
+    hr:after {
+      content: ".  .  .";
+      letter-spacing: .6em;
+      display: inline-block;
+      position: relative;
+      top: -0.3rem;
+      font-size: 1.65em;
+      padding: 0 0.25em;
+      background: inherit;
     }
   """;
 }
