@@ -30,7 +30,7 @@ public class Quilter.Styles.quilter {
 
     p {
       font-size: 1rem;
-      color: #232629;
+      color: #191919;
     }
 
     h1,
@@ -93,9 +93,9 @@ public class Quilter.Styles.quilter {
     }
 
     body {
-      color: #232629;
-      background-color: #FCFCFC;
-      font-family: 'Open Sans', Helvetica, sans-serif;
+      color: #191919;
+      background-color: #F9F9F9;
+      font-family: 'Tinos', serif;
       font-weight: 400;
       line-height: 1.4rem;
       margin-left: 80px;
@@ -114,7 +114,7 @@ public class Quilter.Styles.quilter {
 
     table th {
       font-weight: bold;
-      background-color: #E7E7E7;
+      background-color: #EAEAEA;
     }
 
     table th,
@@ -141,11 +141,20 @@ public class Quilter.Styles.quilter {
       color: #3daee9;
     }
 
-    code {
+    code{
+      display: inline-block;
+      padding: 0 0.25rem;
+      background-color: #EAEAEA;
+      border: 1px solid #EAEAEA;
+      border-radius: 4px;
       font-family: 'Quilt Mono', monospace;
-      text-align: left;
-      padding: 1rem !important;
-      border-radius: 5px;
+      font-weight: normal;
+    }
+
+    pre code{
+      display: block;
+      margin: 1rem auto;
+      overflow-x: scroll;
     }
 
     blockquote {
@@ -157,7 +166,7 @@ public class Quilter.Styles.quilter {
     }
     
     blockquote > p {
-      color: #8d8d8d;
+      color: inherit;
       margin-top: 20px;
       margin-bottom: 20px;
       padding-top: 20px;
@@ -170,6 +179,24 @@ public class Quilter.Styles.quilter {
   
     ul, ol {
       margin-left: -40px;
+    }
+
+    hr {
+      overflow: visible;
+      padding: 0;
+      border: none;
+      color: inherit;
+      text-align: center;
+    }
+    hr:after {
+      content: ".  .  .";
+      letter-spacing: .6em;
+      display: inline-block;
+      position: relative;
+      top: -0.3rem;
+      font-size: 1.65em;
+      padding: 0 0.25em;
+      background: inherit;
     }
   """;
 }
