@@ -16,6 +16,16 @@
  */
 
 namespace Quilter {
+    public class Constants {
+        // Margin Constants
+        public const int NARROW_MARGIN = 5;
+        public const int MEDIUM_MARGIN = 10;
+        public const int WIDE_MARGIN = 15;
+
+        // Typewriter Position
+        public const double TYPEWRITER_POSITION = 0.50;
+    }
+
     public class AppSettings : Granite.Services.Settings {
         public bool dark_mode { get; set; }
         public bool sepia_mode { get; set; }
@@ -25,9 +35,12 @@ namespace Quilter {
         public bool autosave { get; set; }
         public bool spellcheck { get; set; }
         public bool statusbar { get; set; }
+        public bool show_filename { get; set; }
         public bool latex { get; set; }
         public bool highlight { get; set; }
         public bool use_system_font { get; set; }
+        public bool shown_view { get; set; }
+        public bool typewriter_scrolling { get; set; }
         public int focus_mode_type { get; set; }
         public int margins { get; set; }
         public int spacing { get; set; }
@@ -35,10 +48,9 @@ namespace Quilter {
         public int window_width { get; set; }
         public int window_x { get; set; }
         public int window_y { get; set; }
-        public string font { get; set; }
         public string last_file { get; set; }
-        public string subtitle { get; set; }
         public string spellcheck_language { get; set; }
+        public string preview_font { get; set; }
 
         private static AppSettings? instance;
         public static unowned AppSettings get_default () {
