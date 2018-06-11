@@ -29,7 +29,7 @@ public class Quilter.Styles.quilterdark {
     }
 
     p {
-      font-size: 1rem;
+      font-size: 18px;
       color: #C3C3C1;
     }
 
@@ -42,41 +42,59 @@ public class Quilter.Styles.quilterdark {
       font-style: bold;
     }
 
+    h1:first-of-type,
+    h2:first-of-type,
+    h3:first-of-type,
+    h4:first-of-type,
+    h5:first-of-type,
+    h6:first-of-type {
+      margin-top: 20px;
+    }
+
     h1 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: 2rem;
+      text-align: center;
+      text-transform: uppercase;
     }
 
     h2 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: 1.5rem;
+      text-align: center;
+      text-transform: uppercase;
     }
 
     h3 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: 1.25rem;
+      text-align: center;
+      text-transform: uppercase;
     }
 
     h4 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: 1rem;
+      text-align: center;
     }
 
     h5 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: .875rem;
+      text-align: center;
     }
 
     h6 {
-      margin-top: 0;
+      margin-top: 1em;
       margin-bottom: 1em;
       font-size: .75rem;
     }
+
 
     small {
       font-size: .7em;
@@ -95,13 +113,14 @@ public class Quilter.Styles.quilterdark {
     body {
       color: #C3C3C1;
       background-color: #151611;
-      font-family: 'Tinos', serif;
       font-weight: 400;
       line-height: 1.4rem;
       margin-left: 80px;
       margin-right: 80px;
-      margin-top: 40px;
-      max-width: 50rem;
+      align-content: center;
+      align-items: center;
+      align-self: center;
+      display: inline-block;
       text-align: left;
     }
 
@@ -155,6 +174,7 @@ public class Quilter.Styles.quilterdark {
       display: block;
       margin: 1rem auto;
       overflow-x: scroll;
+      padding: 0.5em;
     }
 
     blockquote {
@@ -162,6 +182,7 @@ public class Quilter.Styles.quilterdark {
       border-left: 5px solid #7E8087;
       font-style: italic;
       padding-left: .8rem;
+      margin-left: .8rem;
       text-align: left;
     }
     
@@ -176,6 +197,10 @@ public class Quilter.Styles.quilterdark {
     ul {
       list-style: disc;
     }
+
+    ul>li {
+      font-size: 18px;
+    }
   
     ul, ol {
       margin-left: -40px;
@@ -189,7 +214,7 @@ public class Quilter.Styles.quilterdark {
       text-align: center;
     }
     hr:after {
-      content: ".  .  .";
+      content: "...";
       letter-spacing: .6em;
       display: inline-block;
       position: relative;
