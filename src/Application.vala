@@ -23,6 +23,7 @@ namespace Quilter {
         private static string _cwd;
 
         public static MainWindow window = null;
+        public Widgets.Headerbar toolbar;
         public static string[] supported_mimetypes;
 
         construct {
@@ -57,11 +58,9 @@ namespace Quilter {
 
         protected override int command_line (ApplicationCommandLine command_line) {
             string[] args = command_line.get_arguments ();
-
             var context = new OptionContext ("File");
             context.add_main_entries (entries, "com.github.lainsce.quilter");
             context.add_group (Gtk.get_option_group (true));
-
             int unclaimed_args;
 
             try {
@@ -147,22 +146,38 @@ namespace Quilter {
                         }
 
                         if (reason.length > 0) {
-                            warning ("%s", err_msg);
+                            msg = err_msg.printf ("<b>%s</b>".printf (file.get_path ()), reason);
                         }
 
                     } catch (Error e) {
                         warning (e.message);
                     }
+
+                    // Notify the user that something happened.
+                    if (msg.length > 0) {
+                        var parent_window = get_last_window () as Gtk.Window;
+                        var dialog = new Gtk.MessageDialog.with_markup (parent_window,
+                            Gtk.DialogFlags.MODAL,
+                            Gtk.MessageType.ERROR,
+                            Gtk.ButtonsType.CLOSE,
+                            msg);
+                        dialog.run ();
+                        dialog.destroy ();
+                        dialog.close ();
+                    }
                 }
 
                 if (files.length > 0) {
                     Services.FileManager.open_from_outside (files, "");
-                    var settings = AppSettings.get_default ();
-                    window.toolbar.subtitle = settings.subtitle;
                 }
             }
 
             return 0;
+        }
+
+        public MainWindow? get_last_window () {
+            unowned List<weak Gtk.Window> windows = get_windows ();
+            return windows.length () > 0 ? windows.last ().data as MainWindow : null;
         }
 
         private static void register_default_handler () {
