@@ -20,16 +20,17 @@ namespace Quilter.Widgets {
     public class SourceView : Gtk.SourceView {
         public static new Gtk.SourceBuffer buffer;
         public bool is_modified {get; set; default = false;}
+        public bool should_scroll {get; set; default = false;}
         public File file;
-        public WebView webview;
         public GtkSpell.Checker spell = null;
-        private string font;
         private Gtk.TextTag blackfont;
         private Gtk.TextTag lightgrayfont;
         private Gtk.TextTag darkgrayfont;
         private Gtk.TextTag whitefont;
         private Gtk.TextTag sepiafont;
         private Gtk.TextTag lightsepiafont;
+        public Gtk.TextTag warning_tag;
+        public Gtk.TextTag error_tag;
 
         public signal void changed ();
 
@@ -110,8 +111,8 @@ namespace Quilter.Widgets {
             buffer.highlight_syntax = true;
             buffer.set_max_undo_levels (20);
             buffer.changed.connect (() => {
+                is_modified = true;
                 on_text_modified ();
-                Application.window.unsaved_indicator (false);
             });
 
             darkgrayfont = buffer.create_tag(null, "foreground", "#393939");
@@ -121,11 +122,22 @@ namespace Quilter.Widgets {
             lightsepiafont = buffer.create_tag(null, "foreground", "#a18866");
             sepiafont = buffer.create_tag(null, "foreground", "#2D1708");
 
+            warning_tag = new Gtk.TextTag ("warning_bg");
+            warning_tag.underline = Pango.Underline.ERROR;
+            warning_tag.underline_rgba = Gdk.RGBA () { red = 0.13, green = 0.55, blue = 0.13, alpha = 1.0 };
+
+            error_tag = new Gtk.TextTag ("error_bg");
+            error_tag.underline = Pango.Underline.ERROR;
+
+            buffer.tag_table.add (error_tag);
+            buffer.tag_table.add (warning_tag);
+
             is_modified = false;
 
-            if (settings.autosave = true && is_modified = true) {
+            if (settings.autosave == true) {
                 Timeout.add (10000, () => {
                     on_text_modified ();
+                    Services.FileManager.save_work_file ();
                     return true;
                 });
             }
@@ -154,12 +166,10 @@ namespace Quilter.Widgets {
         }
 
         public void on_text_modified () {
+            should_scroll = true;
             if (is_modified) {
                 changed ();
-                Services.FileManager.save_work_file ();
                 is_modified = false;
-            } else {
-                is_modified = true;
             }
         }
 
@@ -181,22 +191,15 @@ namespace Quilter.Widgets {
             buffer.place_cursor (start);
         }
 
-        public void use_default_font (bool value) {
-            if (!value) {
-                return;
-            }
-
-            var default_font = "Quilt Mono 12";
-
-            this.font = default_font;
+        public void dynamic_margins() {
+            Application.window.dynamic_margins();
         }
 
         private void update_settings () {
             var settings = AppSettings.get_default ();
             this.set_pixels_above_lines(settings.spacing);
             this.set_pixels_inside_wrap(settings.spacing);
-            this.left_margin = settings.margins;
-            this.right_margin = settings.margins;
+            dynamic_margins();
             this.set_show_line_numbers (settings.show_num_lines);
 
             if (!settings.focus_mode) {
@@ -208,15 +211,19 @@ namespace Quilter.Widgets {
                 buffer.remove_tag(sepiafont, start, end);
                 buffer.remove_tag(blackfont, start, end);
                 buffer.remove_tag(whitefont, start, end);
-                this.font = settings.font;
-                use_default_font (settings.use_system_font);
-                this.override_font (Pango.FontDescription.from_string (this.font));
+                var buffer_context = this.get_style_context ();
+                buffer_context.add_class ("small-text");
+                buffer_context.remove_class ("focus-text");
                 buffer.notify["cursor-position"].disconnect (set_focused_text);
             } else {
                 set_focused_text ();
+                var buffer_context = this.get_style_context ();
+                buffer_context.add_class ("focus-text");
+                buffer_context.remove_class ("small-text");
                 buffer.notify["cursor-position"].connect (set_focused_text);
-                this.font = "Quilt Mono 14";
-                this.override_font (Pango.FontDescription.from_string (this.font));
+                if (settings.typewriter_scrolling) {
+                    Timeout.add(500, move_typewriter_scolling);
+                }
             }
 
             set_scheme (get_default_scheme ());
@@ -274,6 +281,16 @@ namespace Quilter.Widgets {
             return "quilter";
         }
 
+        public bool move_typewriter_scolling () {
+            var settings = AppSettings.get_default ();
+            if (should_scroll) {
+                var cursor = buffer.get_insert ();
+                this.scroll_to_mark(cursor, 0.0, true, 0.0, Constants.TYPEWRITER_POSITION);
+                should_scroll = false;
+            }
+            return (settings.focus_mode && settings.typewriter_scrolling);
+        }
+
         public void set_focused_text () {
             Gtk.TextIter cursor_iter;
             Gtk.TextIter start, end;
@@ -296,8 +313,7 @@ namespace Quilter.Widgets {
 
             buffer.apply_tag(lightgrayfont, start, end);
             buffer.remove_tag(blackfont, start, end);
-            
-            
+            should_scroll = true;
 
             if (cursor != null) {
                 var start_sentence = cursor_iter;
